@@ -1,0 +1,14 @@
+ingress:
+  hosts:
+    - host: model2.k8s.arnemue.de
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+   - secretName: chart2-example-tls
+     hosts:
+       - model2.k8s.arnemue.de
+
+
+env:
+  RESPONSE_VAR: green
