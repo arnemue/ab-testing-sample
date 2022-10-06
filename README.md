@@ -1,2 +1,2 @@
-# azure-functions-sample
-Demo repository for deployment of Azure functions via Github Actions
+# ab-testing-sample
+Demo repository for deployment of Azure functions via Github Actions and deploying models to Kubernetes
