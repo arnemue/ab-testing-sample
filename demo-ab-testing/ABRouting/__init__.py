@@ -30,9 +30,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         data = r.json()
 
-        group = data["Group"]
+        prediction = data["prediction"]
 
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully and the group is {group}.")
+        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully and the prediction is {prediction}.")
     else:
         return func.HttpResponse(
              "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
