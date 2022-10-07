@@ -1,7 +1,7 @@
 name: Deploy Python project to function app
 
 on:
-  [push]
+  workflow_dispatch:
 
 env:
   AZURE_FUNCTIONAPP_NAME: abtesting # set this to your application's name
