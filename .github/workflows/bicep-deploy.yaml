@@ -25,4 +25,4 @@ jobs:
         failOnStdErr: false
     
     - name: Echo storage endpoint
-      run: echo ${{ steps.bicep_deploy.outputs.storageEndpoint }}
+      run: echo ${{ steps.bicep_deploy.outputs.storageId }}
