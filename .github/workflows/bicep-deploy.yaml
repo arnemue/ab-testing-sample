@@ -16,9 +16,13 @@ jobs:
       # Deploy Bicep file
     - name: deploy
       uses: azure/arm-deploy@v1
+      id: bicep_deploy
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./infra/main.bicep
         # parameters: 'storagePrefix=arnem storageSKU=Standard_LRS'
         failOnStdErr: false
+    
+    - name: Echo storage endpoint
+      run: echo ${{ steps.bicep_deploy.outputs.storageEndpoint }}

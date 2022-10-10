@@ -30,4 +30,4 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   }
 }
 
-output storageEndpoint string = stg.id
+output storageEndpoint object = stg.properties.primaryEndpoints
