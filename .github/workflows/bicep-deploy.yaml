@@ -23,6 +23,7 @@ jobs:
         template: ./infra/main.bicep
         # parameters: 'storagePrefix=arnem storageSKU=Standard_LRS'
         failOnStdErr: false
+        additionalArguments: "--what-if"
     
     - name: Echo storage endpoint
       run: echo ${{ steps.bicep_deploy.outputs.storageId }}
