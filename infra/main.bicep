@@ -1,33 +1,69 @@
-// @minLength(3)
-// @maxLength(11)
-// param storagePrefix string
+param functionAppName string              // Function App name.
+param servicePlanName string              // Existing Service Plan Name (must be in the same RG).
+param storageAccountName string           // Existing Storage Account Name - could be in different RG than Function app.
+param storageAccountResourceGroup string  // Resource group where Storage Account is located.
+param appInsightsName string              // Existing App Insight Name - could be in different RG than Function app.
+param appInsightsResourceGroup string     // Resource group where  App Insight is located - mainly is a Devo rg.
+param location string = resourceGroup().location // Location where to deploy the Function app
 
-@allowed([
-  'Standard_LRS'
-  'Standard_GRS'
-  'Standard_RAGRS'
-  'Standard_ZRS'
-  'Premium_LRS'
-  'Premium_ZRS'
-  'Standard_GZRS'
-  'Standard_RAGZRS'
-])
-param storageSKU string = 'Standard_LRS'
+var storageAccountEndpoint = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
 
-param location string = resourceGroup().location
 
-var uniqueStorageName = 'arnemdcoaoofmuug3a'
-
-resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name: uniqueStorageName
-  location: location
-  sku: {
-    name: storageSKU
-  }
-  kind: 'StorageV2'
-  properties: {
-    supportsHttpsTrafficOnly: true
-  }
+resource servicePlan 'Microsoft.Web/serverfarms@2021-02-01' existing = {
+  name: servicePlanName
 }
 
-output storageId string = stg.id
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
+  name: storageAccountName
+  scope: resourceGroup(storageAccountResourceGroup)
+}
+
+resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' existing = {
+  name: appInsightsName
+  scope: resourceGroup(appInsightsResourceGroup)
+}
+
+resource functionAppResource 'Microsoft.Web/sites@2021-02-01' = {
+  name: functionAppName
+  identity:{
+    type:'SystemAssigned'    
+  }
+  location: location
+  kind: 'functionapp'
+  properties: {
+    serverFarmId: servicePlan.id
+    httpsOnly: true
+    siteConfig: {
+      appSettings: [
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsights.properties.InstrumentationKey
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: appInsights.properties.ConnectionString
+        }
+        {
+          name: 'FUNCTIONS_EXTENSION_VERSION'
+          value: '~4'
+        }
+        {
+          name: 'FUNCTIONS_WORKER_RUNTIME'
+          value: 'python'
+        }
+        {
+          name: 'AzureWebJobsStorage'
+          value: storageAccountEndpoint
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: storageAccountEndpoint
+        }
+        {
+          name: 'WEBSITE_CONTENTSHARE'
+          value: toLower(functionAppName)
+        }
+      ]
+    }
+  }
+}

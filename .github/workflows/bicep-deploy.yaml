@@ -14,17 +14,6 @@ jobs:
         creds: ${{ secrets.AZURE_RG_CREDENTIALS }}
 
       # Deploy Bicep file
-    - name: diff
-      uses: azure/arm-deploy@v1
-      with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ secrets.AZURE_RG }}
-        template: ./infra/main.bicep
-        # parameters: 'storagePrefix=arnem storageSKU=Standard_LRS'
-        failOnStdErr: false
-        additionalArguments: "--what-if"
-
-      # Deploy Bicep file
     - name: deploy
       uses: azure/arm-deploy@v1
       id: bicep_deploy
@@ -32,7 +21,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./infra/main.bicep
-        # parameters: 'storagePrefix=arnem storageSKU=Standard_LRS'
+        parameters: 'functionAppName=arnemfunc servicePlanName=arnemasp storageAccountName=arnemfuncsacc storageAccountResourceGroup=bicep-rg appInsightsName=arnemappi appInsightsResourceGroup=bicep-rg'
         failOnStdErr: false
 
     - name: Echo storage endpoint
