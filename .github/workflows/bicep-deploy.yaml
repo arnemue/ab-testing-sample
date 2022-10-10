@@ -20,5 +20,5 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./infra/main.bicep
-        parameters: 'storagePrefix=arnem storageSKU=Standard_LRS'
+        # parameters: 'storagePrefix=arnem storageSKU=Standard_LRS'
         failOnStdErr: false
