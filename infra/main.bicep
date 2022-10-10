@@ -34,7 +34,7 @@ resource functionAppResource 'Microsoft.Web/sites@2021-02-01' = {
     serverFarmId: servicePlan.id
     httpsOnly: true
     siteConfig: {
-      pythonVersion: '3.9'
+      linuxFxVersion: 'python|3.9'
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
