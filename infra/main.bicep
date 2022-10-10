@@ -14,8 +14,7 @@
 ])
 param storageSKU string = 'Standard_LRS'
 
-// param location string = resourceGroup().location
-param location string = 'azure-functions'
+param location string = resourceGroup().location
 
 var uniqueStorageName = 'arnemdcoaoofmuug3a'
 
