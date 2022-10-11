@@ -35,6 +35,7 @@ resource functionAppResource 'Microsoft.Web/sites@2021-02-01' = {
     httpsOnly: true
     siteConfig: {
       linuxFxVersion: 'Python|3.9'
+      http20Enabled: true
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
