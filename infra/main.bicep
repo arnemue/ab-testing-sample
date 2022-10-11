@@ -2,8 +2,8 @@ param functionAppName string = 'arnemfunc'              // Function App name.
 param servicePlanName string = 'arnemasp'             // Existing Service Plan Name (must be in the same RG).
 param storageAccountName string = 'arnemfuncsacc'          // Existing Storage Account Name - could be in different RG than Function app.
 param storageAccountResourceGroup string = 'bicep-rg'  // Resource group where Storage Account is located.
-param appInsightsName string = 'arnemappi'             // Existing App Insight Name - could be in different RG than Function app.
-param appInsightsResourceGroup string = 'bicep-rg'    // Resource group where  App Insight is located - mainly is a Devo rg.
+// param appInsightsName string = 'arnemappi'             // Existing App Insight Name - could be in different RG than Function app.
+// param appInsightsResourceGroup string = 'bicep-rg'    // Resource group where  App Insight is located - mainly is a Devo rg.
 param location string = resourceGroup().location // Location where to deploy the Function app
 
 var storageAccountEndpoint = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
@@ -18,10 +18,10 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing 
   scope: resourceGroup(storageAccountResourceGroup)
 }
 
-resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' existing = {
-  name: appInsightsName
-  scope: resourceGroup(appInsightsResourceGroup)
-}
+// resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' existing = {
+//   name: appInsightsName
+//   scope: resourceGroup(appInsightsResourceGroup)
+// }
 
 resource functionAppResource 'Microsoft.Web/sites@2021-02-01' = {
   name: functionAppName
@@ -37,17 +37,17 @@ resource functionAppResource 'Microsoft.Web/sites@2021-02-01' = {
       linuxFxVersion: 'Python|3.9'
       http20Enabled: true
       appSettings: [
-        {
-          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: appInsights.properties.InstrumentationKey
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: appInsights.properties.ConnectionString
-        }
+        // {
+        //   name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+        //   value: appInsights.properties.InstrumentationKey
+        // }
+        // {
+        //   name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+        //   value: appInsights.properties.ConnectionString
+        // }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~3'
+          value: '~4'
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
