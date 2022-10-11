@@ -1,5 +1,11 @@
 on:
   workflow_dispatch:
+    inputs:
+      RND_NUMBER:
+        type: string
+        description: 'Number to append to function app name'
+        required: true
+
 name: Azure ARM
 jobs:
   build-and-deploy:
@@ -22,7 +28,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./infra/main.bicep
-        parameters: 'functionAppName=arnemfunc2 servicePlanName=arnemasp storageAccountName=arnemfuncsacc storageAccountResourceGroup=bicep-rg appInsightsName=arnemappi appInsightsResourceGroup=bicep-rg'
+        parameters: 'functionAppName=arnemfunc${{ inputs.RND_NUMBER }} servicePlanName=arnemasp storageAccountName=arnemfuncsacc storageAccountResourceGroup=bicep-rg appInsightsName=arnemappi appInsightsResourceGroup=bicep-rg'
         failOnStdErr: false
 
     - name: Echo storage endpoint

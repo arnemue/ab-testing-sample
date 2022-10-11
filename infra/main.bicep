@@ -32,7 +32,6 @@ resource functionAppResource 'Microsoft.Web/sites@2021-02-01' = {
   kind: 'functionapp'
   properties: {
     serverFarmId: servicePlan.id
-    enabled: true
     httpsOnly: true
     siteConfig: {
       linuxFxVersion: 'Python|3.9'
@@ -47,7 +46,7 @@ resource functionAppResource 'Microsoft.Web/sites@2021-02-01' = {
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~4'
+          value: '~3'
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
