@@ -2,8 +2,8 @@ param functionAppName string = 'arnemfunc'              // Function App name.
 param servicePlanName string = 'arnemasp'             // Existing Service Plan Name (must be in the same RG).
 param storageAccountName string = 'arnemfuncsacc'          // Existing Storage Account Name - could be in different RG than Function app.
 param storageAccountResourceGroup string = 'bicep-rg'  // Resource group where Storage Account is located.
-// param appInsightsName string = 'arnemappi'             // Existing App Insight Name - could be in different RG than Function app.
-// param appInsightsResourceGroup string = 'bicep-rg'    // Resource group where  App Insight is located - mainly is a Devo rg.
+param appInsightsName string = 'arnemappi'             // Existing App Insight Name - could be in different RG than Function app.
+param appInsightsResourceGroup string = 'bicep-rg'    // Resource group where  App Insight is located - mainly is a Devo rg.
 param location string = resourceGroup().location // Location where to deploy the Function app
 
 var storageAccountEndpoint = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
