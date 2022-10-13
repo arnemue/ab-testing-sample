@@ -1,0 +1,12 @@
+name: Dummy workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub action'
+      uses: actions/checkout@v2
+
