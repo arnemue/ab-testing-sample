@@ -51,19 +51,10 @@ module vNet 'network-virtualNetwork.bicep' = {
 var networkSecurityGroupResourceId =  nsg.outputs.networkSecurityGroupResourceId
 var applicationGatewaySubnetResourceId = vNet.outputs.applicationGatewaySubnetResourceId
 
-
-
-resource publicIp 'Microsoft.Network/publicIPAddresses@2022-01-01' = {
+resource publicIp 'Microsoft.Network/publicIPAddresses@2022-01-01' existing = {
   name: publicIpName
-  location: location
-  sku: {
-    name: 'Standard'
-    tier: 'Regional'
-  }
-  properties: {
-    publicIPAllocationMethod: 'Static'
-  }
 }
+
 
 
 resource appgw 'Microsoft.Network/applicationGateways@2020-11-01' = {

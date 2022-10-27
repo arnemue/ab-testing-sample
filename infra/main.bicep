@@ -9,9 +9,22 @@ param tagValues object =  {
   usage: 'testing'
   env: 'dev'
 }
-
+param publicIpName string = 'arnemPubIp'
 
 var functionBaseUrl =  func_app.outputs.functionBaseUrl
+
+
+resource publicIp 'Microsoft.Network/publicIPAddresses@2022-01-01' = {
+  name: publicIpName
+  location: location
+  sku: {
+    name: 'Standard'
+    tier: 'Regional'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+  }
+}
 
 
 module app_svc_plan 'app-service-plan.bicep' = {
