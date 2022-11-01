@@ -5,6 +5,7 @@ param storageAccountResourceGroup string = 'bicep-rg'  // Resource group where S
 param appInsightsName string = 'arnemappi'             // Existing App Insight Name - could be in different RG than Function app.
 param appInsightsResourceGroup string = 'bicep-rg'    // Resource group where  App Insight is located - mainly is a Devo rg.
 param location string = resourceGroup().location // Location where to deploy the Function app
+param applicationGatewaySubnetResourceId string
 
 var storageAccountEndpoint = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
 
@@ -39,6 +40,16 @@ resource functionAppResource 'Microsoft.Web/sites@2022-03-01' = {
       http20Enabled: true
       ftpsState: 'FtpsOnly'
       alwaysOn: true
+      ipSecurityRestrictions: [
+        {
+          vnetSubnetResourceId: applicationGatewaySubnetResourceId
+          action: 'Allow'
+          tag: 'Default'
+          priority: 200
+          name: 'appGatewaySubnet'
+          description: 'Isolate traffic to subnet containing Azure Application Gateway'
+        }
+      ]
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'

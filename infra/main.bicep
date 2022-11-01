@@ -10,6 +10,7 @@ param tagValues object =  {
   env: 'dev'
 }
 param publicIpName string = 'arnemPubIp'
+param virtualNetworkName string = 'arnemVnet'
 
 var functionBaseUrl =  func_app.outputs.functionBaseUrl
 
@@ -25,6 +26,16 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2022-01-01' = {
     publicIPAllocationMethod: 'Static'
   }
 }
+
+module vNet 'network-virtualNetwork.bicep' = {
+  name: 'network-vNet'
+  params: {
+    virtualNetworkName: virtualNetworkName
+    location: location
+  }
+}
+
+var applicationGatewaySubnetResourceId = vNet.outputs.applicationGatewaySubnetResourceId
 
 
 module app_svc_plan 'app-service-plan.bicep' = {
@@ -58,6 +69,7 @@ module func_app 'function-app.bicep' = {
     storageAccountResourceGroup: resourceGroup().name
     appInsightsName: appInsightsName
     appInsightsResourceGroup: resourceGroup().name
+    applicationGatewaySubnetResourceId: applicationGatewaySubnetResourceId
   }
   dependsOn: [
     app_svc_plan
@@ -72,6 +84,7 @@ module app_gw 'appGateway.bicep' = {
   params: {
     location: location
     functionBaseUrl: functionBaseUrl
+    applicationGatewaySubnetResourceId: applicationGatewaySubnetResourceId
   }
   dependsOn: [
     func_app

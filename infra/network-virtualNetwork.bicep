@@ -4,7 +4,6 @@ parameters
 ------------------------
 */
 param virtualNetworkName string
-param networkSecurityGroupId string
 param location string
 
 /*
@@ -41,9 +40,12 @@ resource vNet 'Microsoft.Network/virtualNetworks@2022-01-01' = {
         name: applicationGatewaySubnetName
         properties: {
           addressPrefix: '172.21.0.0/16'
-          networkSecurityGroup: {
-            id: networkSecurityGroupId
-          }
+          serviceEndpoints: [
+            {
+              service: 'Microsoft.Web'
+              locations: [ '*' ]
+            }
+          ]
         }
       }
 
